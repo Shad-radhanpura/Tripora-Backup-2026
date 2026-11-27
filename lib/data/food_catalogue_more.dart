@@ -1,0 +1,178 @@
+import 'local_food.dart';
+
+/// Additional dishes for destinations that had no food guide (completion pass).
+///
+/// These are general descriptions of well-known regional dishes. They are not
+/// restaurant listings, and no prices or opening hours are given. None of these
+/// dishes has a verified photo yet, so each one shows a labelled placeholder
+/// instead of a picture. Add a photo and credit to the dish when one is verified.
+const Map<String, List<LocalDish>> moreFoodByDestination = {
+  'alappuzha': [
+    LocalDish(name: 'Karimeen pollichathu', category: 'Main meal', vegetarian: false, description: 'Pearl spot fish marinated in spices, wrapped in banana leaf and grilled.'),
+    LocalDish(name: 'Appam with stew', category: 'Breakfast', vegetarian: false, description: 'Soft rice pancakes with a mild coconut-milk stew.'),
+    LocalDish(name: 'Kerala sadya', category: 'Festive meal', vegetarian: true, description: 'A vegetarian feast served on a banana leaf, with many small curries and payasam.'),
+    LocalDish(name: 'Puttu and kadala curry', category: 'Breakfast', vegetarian: true, description: 'Steamed rice-and-coconut cylinders served with a spiced black chickpea curry.'),
+    LocalDish(name: 'Pal payasam', category: 'Dessert', vegetarian: true, description: 'A slow-cooked rice pudding made with milk, jaggery or sugar, and cardamom.'),
+  ],
+  'ladakh': [
+    LocalDish(name: 'Thukpa', category: 'Main meal', vegetarian: false, description: 'A hot noodle soup with vegetables, served with meat or without.'),
+    LocalDish(name: 'Momos', category: 'Snack', vegetarian: false, description: 'Steamed dumplings filled with vegetables or meat, served with a spicy dip.'),
+    LocalDish(name: 'Butter tea', category: 'Drink', vegetarian: true, description: 'Salted tea made with butter and milk, traditionally served in Ladakhi homes.'),
+    LocalDish(name: 'Skyu', category: 'Main meal', vegetarian: false, description: 'A hand-rolled pasta stew cooked with vegetables, a winter comfort dish.'),
+    LocalDish(name: 'Apricot dessert', category: 'Dessert', vegetarian: true, description: 'Dried and fresh apricots served as jam or in simple desserts, a local favourite.'),
+  ],
+  'rishikesh': [
+    LocalDish(name: 'Aloo ke gutke', category: 'Snack', vegetarian: true, description: 'Potatoes tossed with mustard seeds, chilli and herbs, a Kumaoni street snack.'),
+    LocalDish(name: 'Kumaoni bhatt ki churkani', category: 'Main meal', vegetarian: true, description: 'Black soybean cooked into a thick, spiced curry, served with rice or rotis.'),
+    LocalDish(name: 'Bal mithai', category: 'Dessert', vegetarian: true, description: 'A chocolate-brown fudge from Almora, coated with tiny sugar balls.'),
+    LocalDish(name: 'Singori', category: 'Dessert', vegetarian: true, description: 'Sweet khoya rolled in leaves, a traditional Kumaoni sweet.'),
+    LocalDish(name: 'Masala chai', category: 'Drink', vegetarian: true, description: 'Milky tea spiced with ginger and cardamom, sold at roadside stalls.'),
+  ],
+  'udaipur': [
+    LocalDish(name: 'Dal baati churma', category: 'Main meal', vegetarian: true, description: 'Baked wheat dumplings with lentils and a sweet crushed-wheat mix.'),
+    LocalDish(name: 'Gatte ki sabzi', category: 'Main meal', vegetarian: true, description: 'Gram-flour dumplings cooked in a spiced yoghurt gravy.'),
+    LocalDish(name: 'Mawa kachori', category: 'Snack', vegetarian: true, description: 'A flaky pastry stuffed with sweet khoya and nuts.'),
+    LocalDish(name: 'Ker sangri', category: 'Main meal', vegetarian: true, description: 'A desert-bean and berry dish cooked with spices, a traditional Rajasthani vegetable.'),
+    LocalDish(name: 'Laal maas', category: 'Main meal', vegetarian: false, description: 'A fiery mutton curry made with red chillies and yoghurt.'),
+  ],
+  'varanasi': [
+    LocalDish(name: 'Kachori sabzi', category: 'Breakfast', vegetarian: true, description: 'Fried lentil-stuffed puris served with a dry potato curry.'),
+    LocalDish(name: 'Tamatar chaat', category: 'Street food', vegetarian: true, description: 'Tangy tomato chaat with spices, served at riverside stalls.'),
+    LocalDish(name: 'Malaiyo', category: 'Dessert', vegetarian: true, description: 'A light winter foam made from milk, sugar and saffron, served fresh in the morning.'),
+    LocalDish(name: 'Banarasi paan', category: 'Snack', vegetarian: true, description: 'A betel-leaf preparation with spices and sweet fillings, traditionally eaten after meals.'),
+    LocalDish(name: 'Kulhad lassi', category: 'Drink', vegetarian: true, description: 'Thick sweet yoghurt drink served in small clay cups.'),
+  ],
+  'andaman': [
+    LocalDish(name: 'Fish curry rice', category: 'Main meal', vegetarian: false, description: 'Coconut-based fish curry served with rice, a common island meal.'),
+    LocalDish(name: 'Grilled seafood platter', category: 'Main meal', vegetarian: false, description: 'Fresh fish and prawns grilled with local spices.'),
+    LocalDish(name: 'Crab masala', category: 'Main meal', vegetarian: false, description: 'Crab cooked in a spiced onion and tomato gravy.'),
+    LocalDish(name: 'Tender coconut water', category: 'Drink', vegetarian: true, description: 'Fresh coconut water served straight from the shell.'),
+    LocalDish(name: 'Banana leaf vegetarian thali', category: 'Main meal', vegetarian: true, description: 'Rice, dal and vegetable curries served on a banana leaf.'),
+  ],
+  'agra': [
+    LocalDish(name: 'Petha', category: 'Dessert', vegetarian: true, description: 'A translucent sweet made from ash gourd and sugar, flavoured with rose or saffron.'),
+    LocalDish(name: 'Bedai and aloo sabzi', category: 'Breakfast', vegetarian: true, description: 'Deep-fried bread with a spiced potato curry, a morning favourite.'),
+    LocalDish(name: 'Agra chaat', category: 'Street food', vegetarian: true, description: 'Crisp fried dough with spiced potato and yoghurt toppings.'),
+    LocalDish(name: 'Mughlai kebab platter', category: 'Main meal', vegetarian: false, description: 'Marinated and grilled kebabs served with flatbread.'),
+    LocalDish(name: 'Dal ki kachori', category: 'Snack', vegetarian: true, description: 'Lentil-stuffed fried pastries, served hot.'),
+  ],
+  'darjeeling': [
+    LocalDish(name: 'Sel roti', category: 'Snack', vegetarian: true, description: 'A ring-shaped sweet rice bread fried until crisp, served at festivals and tea time.'),
+    LocalDish(name: 'Gundruk soup', category: 'Main meal', vegetarian: true, description: 'A tangy soup made from fermented leafy greens.'),
+    LocalDish(name: 'Kinema curry', category: 'Main meal', vegetarian: true, description: 'Fermented soybean cooked with herbs and spices.'),
+    LocalDish(name: 'Churpi', category: 'Snack', vegetarian: true, description: 'A hard, chewy cheese made from yak or cow milk, eaten as a snack.'),
+    LocalDish(name: 'Darjeeling tea', category: 'Drink', vegetarian: true, description: 'Tea grown on the hill estates, served plain or with milk.'),
+  ],
+  'kolkata': [
+    LocalDish(name: 'Rosogolla', category: 'Dessert', vegetarian: true, description: 'Soft cheese balls soaked in light sugar syrup, a classic Bengali sweet.'),
+    LocalDish(name: 'Macher jhol', category: 'Main meal', vegetarian: false, description: 'A light Bengali fish curry with potatoes and mustard seeds.'),
+    LocalDish(name: 'Kathi roll', category: 'Street food', vegetarian: false, description: 'Spiced meat or paneer wrapped in a flatbread, first made in the city.'),
+    LocalDish(name: 'Mishti doi', category: 'Dessert', vegetarian: true, description: 'Sweetened set yoghurt, traditionally baked in clay pots.'),
+    LocalDish(name: 'Phuchka', category: 'Street food', vegetarian: true, description: 'Hollow crisp shells filled with spiced tamarind water and potato.'),
+  ],
+  'hyderabad': [
+    LocalDish(name: 'Hyderabadi biryani', category: 'Main meal', vegetarian: false, description: 'Layered rice and meat cooked together with saffron and fried onions.'),
+    LocalDish(name: 'Haleem', category: 'Festive meal', vegetarian: false, description: 'A slow-cooked stew of meat, lentils and wheat, popular in the Ramzan season.'),
+    LocalDish(name: 'Double ka meetha', category: 'Dessert', vegetarian: true, description: 'Bread pudding soaked in sweet milk and garnished with nuts.'),
+    LocalDish(name: 'Irani chai', category: 'Drink', vegetarian: true, description: 'Strong, sweet tea served at old-city cafés.'),
+    LocalDish(name: 'Mirchi ka salan', category: 'Main meal', vegetarian: true, description: 'Green chillies in a tangy peanut and sesame gravy, served with biryani.'),
+  ],
+  'bengaluru': [
+    LocalDish(name: 'Masala dosa', category: 'Breakfast', vegetarian: true, description: 'A crisp fermented rice-and-lentil crepe with a spiced potato filling.'),
+    LocalDish(name: 'Bisi bele bath', category: 'Main meal', vegetarian: true, description: 'A spiced rice and lentil dish with vegetables and a tangy tamarind flavour.'),
+    LocalDish(name: 'Benne dosa', category: 'Breakfast', vegetarian: true, description: 'A thick, buttery dosa cooked on a griddle with plenty of butter.'),
+    LocalDish(name: 'Filter coffee', category: 'Drink', vegetarian: true, description: 'Strong coffee brewed through a metal filter and mixed with hot milk.'),
+    LocalDish(name: 'Ragi mudde', category: 'Main meal', vegetarian: true, description: 'Finger-millet balls served with a thin vegetable or leafy curry.'),
+  ],
+  'chennai': [
+    LocalDish(name: 'Idli sambar', category: 'Breakfast', vegetarian: true, description: 'Steamed rice cakes served with a lentil and vegetable stew.'),
+    LocalDish(name: 'Chettinad chicken', category: 'Main meal', vegetarian: false, description: 'Chicken cooked with black pepper and freshly ground Chettinad spices.'),
+    LocalDish(name: 'Pongal', category: 'Breakfast', vegetarian: true, description: 'Soft rice and lentils cooked with pepper and cumin, served with chutney.'),
+    LocalDish(name: 'Murukku', category: 'Snack', vegetarian: true, description: 'Crunchy spiral snack made from rice and lentil flour.'),
+    LocalDish(name: 'Jigarthanda', category: 'Drink', vegetarian: true, description: 'A chilled drink of milk, almond gum and sarsaparilla syrup.'),
+  ],
+  'kochi': [
+    LocalDish(name: 'Fish molee', category: 'Main meal', vegetarian: false, description: 'Fish simmered in coconut milk with green chillies and curry leaves.'),
+    LocalDish(name: 'Kerala parotta', category: 'Main meal', vegetarian: true, description: 'Flaky layered flatbread, usually served with curries.'),
+    LocalDish(name: 'Banana chips', category: 'Snack', vegetarian: true, description: 'Thin crisp slices of raw banana, fried in coconut oil.'),
+    LocalDish(name: 'Pazham pori', category: 'Snack', vegetarian: true, description: 'Ripe banana slices dipped in batter and fried.'),
+    LocalDish(name: 'Ada pradhaman', category: 'Dessert', vegetarian: true, description: 'A rice-flake dessert cooked in coconut milk and jaggery.'),
+  ],
+  'madurai': [
+    LocalDish(name: 'Jigarthanda', category: 'Drink', vegetarian: true, description: 'A chilled milk drink with almond gum, a Madurai favourite.'),
+    LocalDish(name: 'Kari dosa', category: 'Breakfast', vegetarian: false, description: 'A dosa topped with a spiced mutton keema, a late-night favourite.'),
+    LocalDish(name: 'Idiyappam', category: 'Breakfast', vegetarian: true, description: 'Steamed rice-flour noodles, served with coconut milk or a curry.'),
+    LocalDish(name: 'Mutton chukka', category: 'Main meal', vegetarian: false, description: 'Dry-roasted mutton with pepper and curry leaves.'),
+    LocalDish(name: 'Paruthi paal', category: 'Drink', vegetarian: true, description: 'A sweet drink made from cotton-seed milk, a traditional Madurai drink.'),
+  ],
+  'pune': [
+    LocalDish(name: 'Misal pav', category: 'Street food', vegetarian: true, description: 'A spicy sprouted-bean curry topped with onion and farsan, served with bread.'),
+    LocalDish(name: 'Bhakarwadi', category: 'Snack', vegetarian: true, description: 'Spiced and rolled fried pastry, a crisp tea-time snack.'),
+    LocalDish(name: 'Sabudana khichdi', category: 'Snack', vegetarian: true, description: 'Tapioca pearls cooked with peanuts and cumin, often eaten during fasts.'),
+    LocalDish(name: 'Puran poli', category: 'Festive meal', vegetarian: true, description: 'A sweet lentil-filled flatbread, served at festivals.'),
+    LocalDish(name: 'Kolhapuri chicken', category: 'Main meal', vegetarian: false, description: 'Chicken in a fiery gravy made with local red chillies and spices.'),
+  ],
+  'shimla': [
+    LocalDish(name: 'Himachali dham', category: 'Festive meal', vegetarian: true, description: 'A traditional feast of rice, dal and yoghurt dishes, served on leaf plates.'),
+    LocalDish(name: 'Siddu', category: 'Snack', vegetarian: true, description: 'Steamed wheat buns stuffed with walnut or poppy seeds, served with ghee.'),
+    LocalDish(name: 'Chha gosht', category: 'Main meal', vegetarian: false, description: 'Mutton cooked in a yoghurt-based gravy with mild spices.'),
+    LocalDish(name: 'Babru', category: 'Snack', vegetarian: true, description: 'Crisp black-gram stuffed flatbreads, a Himachali hill snack.'),
+    LocalDish(name: 'Sepu badi', category: 'Main meal', vegetarian: true, description: 'Lentil cakes cooked with greens and herbs, a local speciality.'),
+  ],
+  'amritsar': [
+    LocalDish(name: 'Amritsari kulcha', category: 'Breakfast', vegetarian: true, description: 'Stuffed flatbread baked in a tandoor, served with chole.'),
+    LocalDish(name: 'Makki di roti with sarson da saag', category: 'Main meal', vegetarian: true, description: 'Maize flatbread served with mustard-leaf curry and butter.'),
+    LocalDish(name: 'Amritsari fish fry', category: 'Street food', vegetarian: false, description: 'Fish marinated in spiced gram flour and deep-fried.'),
+    LocalDish(name: 'Lassi', category: 'Drink', vegetarian: true, description: 'Thick sweet yoghurt drink, served in tall glasses.'),
+    LocalDish(name: 'Kesar kheer', category: 'Dessert', vegetarian: true, description: 'Rice pudding flavoured with saffron and nuts, often shared at the Golden Temple langar.'),
+  ],
+  'jodhpur': [
+    LocalDish(name: 'Mirchi bada', category: 'Street food', vegetarian: true, description: 'A large green chilli stuffed with spiced potato, coated in gram flour and fried.'),
+    LocalDish(name: 'Makhania lassi', category: 'Drink', vegetarian: true, description: 'A thick lassi topped with butter, served in clay cups.'),
+    LocalDish(name: 'Pyaaz kachori', category: 'Snack', vegetarian: true, description: 'Crisp pastry stuffed with spiced onion, served with chutney.'),
+    LocalDish(name: 'Ghevar', category: 'Dessert', vegetarian: true, description: 'A disc-shaped sweet made from flour and ghee, topped with sugar syrup and nuts.'),
+    LocalDish(name: 'Marwari kadhi', category: 'Main meal', vegetarian: true, description: 'Yoghurt-based curry with gram flour dumplings, served with rice.'),
+  ],
+  'jaisalmer': [
+    LocalDish(name: 'Bajre ki roti', category: 'Main meal', vegetarian: true, description: 'Pearl-millet flatbread, often served with garlic chutney and ghee.'),
+    LocalDish(name: 'Papad ki sabzi', category: 'Main meal', vegetarian: true, description: 'Dried lentil wafers cooked in a spiced yoghurt gravy.'),
+    LocalDish(name: 'Kalakand', category: 'Dessert', vegetarian: true, description: 'A fudge-like sweet made from milk and sugar.'),
+    LocalDish(name: 'Chaach', category: 'Drink', vegetarian: true, description: 'Spiced buttermilk, a cooling drink for desert days.'),
+    LocalDish(name: 'Rajasthani mutton curry', category: 'Main meal', vegetarian: false, description: 'Mutton cooked slowly with onion, garlic and dry spices.'),
+  ],
+  'mysuru': [
+    LocalDish(name: 'Mysore pak', category: 'Dessert', vegetarian: true, description: 'A rich sweet made from gram flour, sugar and ghee.'),
+    LocalDish(name: 'Mysore masala dosa', category: 'Breakfast', vegetarian: true, description: 'A dosa spread with a spicy red chutney and filled with potato masala.'),
+    LocalDish(name: 'Mysore bonda', category: 'Snack', vegetarian: true, description: 'Deep-fried soft lentil and flour dumplings.'),
+    LocalDish(name: 'Akki rotti', category: 'Breakfast', vegetarian: true, description: 'Rice flatbread cooked with onion, coriander and spices.'),
+    LocalDish(name: 'Mysore filter coffee', category: 'Drink', vegetarian: true, description: 'Strong, chicory-tinged filter coffee served in steel tumblers.'),
+  ],
+  'ooty': [
+    LocalDish(name: 'Homemade chocolate', category: 'Dessert', vegetarian: true, description: 'Chocolates made locally from the Nilgiri hill estates.'),
+    LocalDish(name: 'Nilgiri tea', category: 'Drink', vegetarian: true, description: 'Tea grown on the Nilgiri hill estates, served with milk or lemon.'),
+    LocalDish(name: 'Strawberry cream', category: 'Dessert', vegetarian: true, description: 'Fresh strawberries from the hill farms, served with cream.'),
+    LocalDish(name: 'Hot chocolate', category: 'Drink', vegetarian: true, description: 'A warming chocolate drink, popular during the cool evenings.'),
+    LocalDish(name: 'Vegetable stew', category: 'Main meal', vegetarian: true, description: 'A mild coconut-milk stew with seasonal vegetables.'),
+  ],
+  'shillong': [
+    LocalDish(name: 'Jadoh', category: 'Main meal', vegetarian: false, description: 'Rice cooked with pork and spices, a traditional Khasi dish.'),
+    LocalDish(name: 'Doh khleh', category: 'Main meal', vegetarian: false, description: 'Pork cooked with onion and spices, a Khasi favourite.'),
+    LocalDish(name: 'Pumaloi', category: 'Snack', vegetarian: true, description: 'Steamed rice-flour cakes, often served with a chutney.'),
+    LocalDish(name: 'Tungtap', category: 'Main meal', vegetarian: false, description: 'A fermented fish chutney with chillies and herbs.'),
+    LocalDish(name: 'Ginger tea', category: 'Drink', vegetarian: true, description: 'Hot tea brewed with fresh ginger, served in the hill cafés.'),
+  ],
+  'gangtok': [
+    LocalDish(name: 'Momos', category: 'Snack', vegetarian: false, description: 'Steamed dumplings filled with vegetables or meat, served with a tangy dip.'),
+    LocalDish(name: 'Thukpa', category: 'Main meal', vegetarian: false, description: 'A noodle soup with vegetables and meat, served hot on cold days.'),
+    LocalDish(name: 'Sel roti', category: 'Snack', vegetarian: true, description: 'A ring-shaped sweet rice bread, served at festivals.'),
+    LocalDish(name: 'Churpi soup', category: 'Main meal', vegetarian: true, description: 'A soup made with hard cheese and vegetables.'),
+    LocalDish(name: 'Masala tea', category: 'Drink', vegetarian: true, description: 'Spiced milky tea, popular in the hill towns.'),
+  ],
+  'puducherry': [
+    LocalDish(name: 'Chettinad vegetable kuzhambu', category: 'Main meal', vegetarian: true, description: 'A tangy tamarind and spice curry with vegetables, served with rice.'),
+    LocalDish(name: 'Fish fry', category: 'Street food', vegetarian: false, description: 'Fish marinated in spices and shallow-fried, a seaside favourite.'),
+    LocalDish(name: 'Croissant', category: 'Breakfast', vegetarian: true, description: 'A buttery French-style pastry from the town bakeries.'),
+    LocalDish(name: 'Idiyappam with coconut milk', category: 'Breakfast', vegetarian: true, description: 'Steamed rice noodles served with sweetened coconut milk.'),
+    LocalDish(name: 'Filter coffee', category: 'Drink', vegetarian: true, description: 'Strong filter coffee, served with milk in the French Quarter cafés.'),
+  ],
+};

@@ -1,0 +1,362 @@
+rules_version = '2';
+
+// =====================================================================
+// PROPOSED Firestore security rules for Tripora (project tripora-7ded0)
+// ---------------------------------------------------------------------
+// Revised 17 Oct 2026: adds support_tickets and admin_audit (NOT deployed).
+// Previous revision 15 Oct 2026 (permission-denied diagnosis). NOT deployed
+// and NOT copied into firestore.rules. Backup of the previous version:
+//   _backup_rules_fix_2026-10-15\firestore.rules.proposed.orig
+//
+// To use (only after you approve):
+//   1. Test in Firebase Console > Firestore > Rules > Rules Playground
+//      (checklist in the chat / README), or with the emulator test in
+//      firestore_rules_test\.
+//   2. Copy this file's contents into firestore.rules.
+//   3. firebase deploy --only firestore:rules --project tripora-7ded0
+//
+// Admin accounts are made by hand in the Firebase Console:
+//   Firestore > collection "admins" > Document ID = the account's UID
+//   (Authentication > Users > "User UID"), field role (string) = admin
+// The Console is not limited by these rules; the app can never write here.
+// =====================================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    function adminDoc() {
+      return /databases/$(database)/documents/admins/$(request.auth.uid);
+    }
+
+    // Admin = an admins/{uid} document whose role is exactly "admin".
+    // Same test as FirestoreService.isAdmin() in the app.
+    function isAdmin() {
+      return signedIn()
+        && exists(adminDoc())
+        && get(adminDoc()).data.get('role', '') == 'admin';
+    }
+
+    // ---------------- admins/{uid} ----------------
+    // THE ROLE CHECK. A signed-in user may read only the document whose ID
+    // equals their own UID (isOwner), which is exactly what
+    // FirestoreService.isAdmin(uid) reads after login. Admins may also list
+    // the collection (Admin Panel "admins" count). Nobody can create, edit or
+    // delete an admin document from the app, so no one can promote
+    // themselves; a missing document simply means "not an admin".
+    match /admins/{uid} {
+      allow get: if isOwner(uid) || isAdmin();
+      allow list: if isAdmin();
+      allow create, update, delete: if false;
+    }
+
+    // ---------------- users/{uid} ----------------
+    // Signup writes: uid, name, email, createdAt, lastLoginAt, loginCount.
+    // Each login (merge) writes: uid, email, name, lastLoginAt, loginCount.
+    match /users/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+
+      allow create: if isOwner(uid)
+        && request.resource.data.keys().hasOnly(
+             ['uid', 'name', 'email', 'createdAt', 'lastLoginAt', 'loginCount',
+              'phone', 'homeCity'])
+        && request.resource.data.uid == uid
+        && (!('createdAt' in request.resource.data)
+            || request.resource.data.createdAt == request.time);
+
+      // Own profile only; createdAt can never change and no extra fields
+      // (such as "role" or "isAdmin") can be added.
+      allow update: if isOwner(uid)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(
+             ['uid', 'name', 'email', 'lastLoginAt', 'loginCount',
+              'phone', 'homeCity'])
+        && request.resource.data.uid == uid;
+
+      allow delete: if false;
+
+      // ---------- users/{uid}/favourites/{destinationId} ----------
+      match /favourites/{destinationId} {
+        allow read, delete: if isOwner(uid);
+        allow create, update: if isOwner(uid)
+          && request.resource.data.destinationId == destinationId
+          && request.resource.data.keys().hasOnly(
+               ['destinationId', 'name', 'location', 'imageUrl', 'addedAt']);
+      }
+    }
+
+    // Admin Panel: count favourites across all users (collection group).
+    match /{path=**}/favourites/{destinationId} {
+      allow read: if isAdmin();
+    }
+
+    // ---------------- trips/{tripId} ----------------
+    match /trips/{tripId} {
+      // Works for single reads and for the app's
+      // where('userId', isEqualTo: uid) queries; admins can read all.
+      allow read: if signedIn()
+        && (resource.data.userId == request.auth.uid || isAdmin());
+
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(
+             ['userId', 'destination', 'budget', 'days', 'interest',
+              'itinerary', 'createdAt'])
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.destination is string
+        && request.resource.data.itinerary is string
+        && request.resource.data.days is int;
+
+      // The app never edits trips. Owners (or admins) may delete.
+      allow update: if false;
+      allow delete: if signedIn()
+        && (resource.data.userId == request.auth.uid || isAdmin());
+
+      // ---------- trips/{tripId}/checklist/{itemId} ----------
+      // Travel-documents checklist. Only the trip's owner can read or write
+      // it. Admins are deliberately NOT given access. No document files are
+      // stored here, only labels and ticked state.
+      match /checklist/{itemId} {
+        allow read: if signedIn()
+          && get(/databases/$(database)/documents/trips/$(tripId)).data.userId
+               == request.auth.uid;
+
+        allow create: if signedIn()
+          && get(/databases/$(database)/documents/trips/$(tripId)).data.userId
+               == request.auth.uid
+          && request.resource.data.keys().hasOnly(
+               ['label', 'done', 'custom', 'order', 'createdAt', 'updatedAt'])
+          && request.resource.data.label is string
+          && request.resource.data.label.size() >= 2
+          && request.resource.data.label.size() <= 80
+          && request.resource.data.done is bool
+          && request.resource.data.custom is bool
+          && request.resource.data.order is int;
+
+        // Owner may tick/untick and, for their own items, rename.
+        // Default items cannot be renamed and 'custom' cannot change.
+        allow update: if signedIn()
+          && get(/databases/$(database)/documents/trips/$(tripId)).data.userId
+               == request.auth.uid
+          && request.resource.data.diff(resource.data).affectedKeys()
+               .hasOnly(['done', 'label', 'updatedAt'])
+          && request.resource.data.done is bool
+          && request.resource.data.custom == resource.data.custom
+          && (resource.data.custom == true
+              || request.resource.data.label == resource.data.label)
+          && request.resource.data.label.size() >= 2
+          && request.resource.data.label.size() <= 80;
+
+        // Only the owner's own custom items can be removed.
+        allow delete: if signedIn()
+          && get(/databases/$(database)/documents/trips/$(tripId)).data.userId
+               == request.auth.uid
+          && resource.data.custom == true;
+      }
+    }
+
+    // ---------------- packages/{packageId} ----------------
+    // Tour packages managed in Admin Panel > Package Management. Every
+    // signed-in user can read them; only admins can write.
+    match /packages/{packageId} {
+      allow read: if signedIn();
+      allow create, update: if isAdmin()
+        && request.resource.data.keys().hasOnly(
+             ['title', 'durationDays', 'cities', 'region', 'category',
+              'pricePerPerson', 'hotelClass', 'facilities', 'highlights',
+              'itinerary', 'description', 'imageUrl', 'active'])
+        && request.resource.data.title is string
+        && request.resource.data.durationDays in [10, 15, 20, 30]
+        && request.resource.data.pricePerPerson is int
+        && request.resource.data.active is bool;
+      allow delete: if isAdmin();
+    }
+
+    // ---------------- bookings/{bookingId} ----------------
+    // DEMO booking requests. A user creates their own request (always
+    // "pending" and isDemo == true) and may cancel it; only admins can
+    // confirm, complete, cancel or delete any booking.
+    match /bookings/{bookingId} {
+      allow read: if signedIn()
+        && (resource.data.userId == request.auth.uid || isAdmin());
+
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(
+             ['userId', 'userEmail', 'kind', 'itemId', 'title', 'subtitle',
+              'travelDate', 'travellers', 'unitPrice', 'totalPrice',
+              'contactName', 'contactPhone', 'notes', 'details', 'status',
+              'reference', 'isDemo', 'createdAt'])
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.status == 'pending'
+        && request.resource.data.isDemo == true
+        && request.resource.data.kind in
+             ['package', 'hotel', 'flight', 'train', 'bus', 'cab']
+        && request.resource.data.travellers is int
+        && request.resource.data.travellers >= 1
+        && request.resource.data.travellers <= 9
+        && request.resource.data.unitPrice is int
+        && request.resource.data.totalPrice ==
+             request.resource.data.unitPrice * request.resource.data.travellers
+        && request.resource.data.title is string
+        && request.resource.data.notes.size() <= 300
+        && request.resource.data.createdAt == request.time;
+
+      allow update: if signedIn() && (
+        // Owner: cancel an open request, nothing else.
+        (resource.data.userId == request.auth.uid
+          && request.resource.data.diff(resource.data).affectedKeys()
+               .hasOnly(['status', 'updatedAt'])
+          && request.resource.data.status == 'cancelled'
+          && resource.data.status in ['pending', 'confirmed'])
+        ||
+        // Admin: move through the workflow and leave a note.
+        (isAdmin()
+          && request.resource.data.diff(resource.data).affectedKeys()
+               .hasOnly(['status', 'updatedAt', 'adminNote'])
+          && request.resource.data.status in
+               ['pending', 'confirmed', 'completed', 'cancelled'])
+      );
+
+      allow delete: if isAdmin();
+    }
+
+    // ---------------- reviews/{reviewId} ----------------
+    // Destination reviews. Document ID = "{destinationId}_{userId}", so a
+    // user has at most one review per destination. Signed-in users read
+    // APPROVED reviews and their own; admins read all. Users write only their
+    // own review, and every write leaves it PENDING. Only admins approve,
+    // reject or remove. Averages are computed by the app from approved
+    // documents; no total is stored or trusted.
+    match /reviews/{reviewId} {
+      // "resource == null" lets a user check for their own review, which may
+      // not exist yet, without an error.
+      allow read: if signedIn()
+        && (resource == null
+            || resource.data.status == 'approved'
+            || resource.data.userId == request.auth.uid
+            || isAdmin());
+
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(
+             ['destinationId', 'userId', 'displayName', 'rating', 'text',
+              'status', 'createdAt', 'updatedAt'])
+        && request.resource.data.userId == request.auth.uid
+        && reviewId == request.resource.data.destinationId + '_' + request.auth.uid
+        && request.resource.data.destinationId in ['manali', 'goa', 'jaipur', 'alappuzha', 'ladakh', 'rishikesh', 'udaipur', 'varanasi', 'andaman', 'agra', 'darjeeling', 'dubai', 'bali', 'paris', 'singapore', 'tokyo']
+        && request.resource.data.rating is int
+        && request.resource.data.rating >= 1
+        && request.resource.data.rating <= 5
+        && request.resource.data.text is string
+        && request.resource.data.text.size() >= 10
+        && request.resource.data.text.size() <= 1000
+        && request.resource.data.displayName is string
+        && request.resource.data.displayName.size() <= 60
+        && request.resource.data.status == 'pending'
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time;
+
+      allow update: if signedIn() && (
+        // Owner edit: content only, and the review goes back to pending.
+        (resource.data.userId == request.auth.uid
+          && request.resource.data.diff(resource.data).affectedKeys()
+               .hasOnly(['displayName', 'rating', 'text', 'status', 'updatedAt'])
+          && request.resource.data.userId == request.auth.uid
+          && request.resource.data.status == 'pending'
+          && request.resource.data.rating is int
+          && request.resource.data.rating >= 1
+          && request.resource.data.rating <= 5
+          && request.resource.data.text is string
+          && request.resource.data.text.size() >= 10
+          && request.resource.data.text.size() <= 1000
+          && request.resource.data.displayName.size() <= 60
+          && request.resource.data.updatedAt == request.time)
+        ||
+        // Admin moderation: status only (content is never changed by admins).
+        (isAdmin()
+          && request.resource.data.diff(resource.data).affectedKeys()
+               .hasOnly(['status', 'updatedAt', 'moderatedAt'])
+          && request.resource.data.status in ['pending', 'approved', 'rejected']
+          && request.resource.data.updatedAt == request.time
+          && request.resource.data.moderatedAt == request.time)
+      );
+
+      // Owner removes their own review; admins can remove any review.
+      allow delete: if signedIn()
+        && (resource.data.userId == request.auth.uid || isAdmin());
+    }
+
+    // ---------------- support_tickets/{ticketId} ----------------
+    // Help & support requests. A user creates their own ticket (always
+    // "open") and may withdraw it. Only admins change the status or add a
+    // reply; users can never edit the text they sent.
+    match /support_tickets/{ticketId} {
+      allow read: if signedIn()
+        && (resource.data.userId == request.auth.uid || isAdmin());
+
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(
+             ['userId', 'category', 'subject', 'message', 'status',
+              'createdAt', 'updatedAt'])
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.category in
+             ['booking', 'trip', 'account', 'other']
+        && request.resource.data.subject is string
+        && request.resource.data.subject.size() >= 3
+        && request.resource.data.subject.size() <= 100
+        && request.resource.data.message is string
+        && request.resource.data.message.size() >= 10
+        && request.resource.data.message.size() <= 1000
+        && request.resource.data.status == 'open'
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time;
+
+      // Admin workflow: status and reply only. Text and owner never change.
+      allow update: if isAdmin()
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['status', 'adminReply', 'updatedAt', 'repliedAt'])
+        && request.resource.data.status in
+             ['open', 'in_progress', 'resolved', 'closed']
+        && request.resource.data.updatedAt == request.time
+        && (!('adminReply' in request.resource.data)
+            || request.resource.data.adminReply.size() <= 1000);
+
+      // An owner may withdraw a request only while it is open and has no
+      // reply, which matches the app. Once the team has replied, the ticket
+      // and its audit trail are kept. Admins can delete any ticket.
+      allow delete: if signedIn()
+        && ((resource.data.userId == request.auth.uid
+             && resource.data.status == 'open'
+             && !('adminReply' in resource.data))
+            || isAdmin());
+    }
+
+    // ---------------- admin_audit/{entryId} ----------------
+    // Record of administrative changes (for example a support reply or a
+    // status change). Admins can add and read entries. Entries are never
+    // edited or deleted from the app, and users cannot see them.
+    match /admin_audit/{entryId} {
+      allow read: if isAdmin();
+
+      allow create: if isAdmin()
+        && request.resource.data.keys().hasOnly(
+             ['actorUid', 'action', 'target', 'summary', 'createdAt'])
+        && request.resource.data.actorUid == request.auth.uid
+        && request.resource.data.action is string
+        && request.resource.data.action.size() <= 60
+        && request.resource.data.target is string
+        && request.resource.data.target.size() <= 120
+        && request.resource.data.summary is string
+        && request.resource.data.summary.size() <= 300
+        && request.resource.data.createdAt == request.time;
+
+      allow update, delete: if false;
+    }
+
+    // Everything else is closed (no match = denied).
+  }
+}

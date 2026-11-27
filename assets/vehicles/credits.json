@@ -1,0 +1,72 @@
+{
+ "cab-hatchback.jpg": {
+  "title": "File:Suzuki Karimun Wagon R (Front), Jakarta, Indonesia.jpg",
+  "artist": "RichardSummersault",
+  "licence": "CC0",
+  "page": "https://commons.wikimedia.org/wiki/File:Suzuki_Karimun_Wagon_R_(Front),_Jakarta,_Indonesia.jpg",
+  "bytes": 135716
+ },
+ "cab-sedan.jpg": {
+  "title": "File:Suzuki Dzire 1.2 GL+ 2024.jpg",
+  "artist": "Ethan Llamas",
+  "licence": "CC BY-SA 4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Suzuki_Dzire_1.2_GL%2B_2024.jpg",
+  "bytes": 211024
+ },
+ "cab-suv.jpg": {
+  "title": "File:Maruti Suzuki Ertiga(1).jpg",
+  "artist": "Akashpbrahmavar",
+  "licence": "CC0",
+  "page": "https://commons.wikimedia.org/wiki/File:Maruti_Suzuki_Ertiga(1).jpg",
+  "bytes": 132441
+ },
+ "cab-premium.jpg": {
+  "title": "File:Toyota Innova Crysta 2.4 Z front right.jpg",
+  "artist": "Premnath Kudva",
+  "licence": "CC BY-SA 4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Toyota_Innova_Crysta_2.4_Z_front_right.jpg",
+  "bytes": 181201
+ },
+ "bus-ac-sleeper.jpg": {
+  "title": "File:Volvo 9400 B11R Airavat Club Class.jpg",
+  "artist": "KeralianEditor",
+  "licence": "CC0",
+  "page": "https://commons.wikimedia.org/wiki/File:Volvo_9400_B11R_Airavat_Club_Class.jpg",
+  "bytes": 236894
+ },
+ "bus-volvo-seater.jpg": {
+  "title": "File:TSRTC GARUDA Plus VOLVO B9R.JPG",
+  "artist": "Karthikprincenellore",
+  "licence": "CC BY-SA 4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:TSRTC_GARUDA_Plus_VOLVO_B9R.JPG",
+  "bytes": 169583
+ },
+ "bus-non-ac.jpg": {
+  "title": "File:APSRTC Bus 07122014.jpg",
+  "artist": "Nikhilb239",
+  "licence": "CC BY 3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:APSRTC_Bus_07122014.jpg",
+  "bytes": 228876
+ },
+ "train-chair-car.jpg": {
+  "title": "File:Vande Bharat Express train.jpg",
+  "artist": "Ravi Dwivedi",
+  "licence": "CC BY-SA 4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Vande_Bharat_Express_train.jpg",
+  "bytes": 207595
+ },
+ "train-ac-coach.jpg": {
+  "title": "File:Dibrugarh Rajdhani Express in New Delhi.jpg",
+  "artist": "Ravi Dwivedi",
+  "licence": "CC BY-SA 4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Dibrugarh_Rajdhani_Express_in_New_Delhi.jpg",
+  "bytes": 173000
+ },
+ "flight-wing.jpg": {
+  "title": "File:Airliner wing and clouds over South Pacific.jpg",
+  "artist": "Daniel Case",
+  "licence": "CC BY-SA 4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Airliner_wing_and_clouds_over_South_Pacific.jpg",
+  "bytes": 110103
+ }
+}
